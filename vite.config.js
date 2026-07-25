@@ -66,6 +66,12 @@ export default defineConfig({
       },
     }),
   ],
+  // Force esbuild minifier to avoid rollup/terser plugin which can
+  // require a global `crypto` implementation during build on Netlify.
+  // This prevents "ReferenceError: crypto is not defined" errors.
+  build: {
+    minify: 'esbuild',
+  },
   server: {
     port: 3001,
     host: true,
