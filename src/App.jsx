@@ -42,7 +42,14 @@ function App() {
 
     (async () => {
       try {
-        await Promise.all([detector.loadModel(), generator.loadModel()]);
+        await Promise.all([
+          detector.loadModel(),
+          generator.loadModel((status, percent) => {
+            if (isMounted) {
+              actions.setModelStatus(percent < 100 ? `${status} (${percent}%)` : status);
+            }
+          }),
+        ]);
         if (isMounted) {
           actions.setModelStatus('Model AI Siap');
         }
@@ -93,7 +100,8 @@ function App() {
         await createDelay(APP_CONFIG.factsGenerationDelay);
 
         try {
-          const fact = await generator.generateFacts(result.className, currentTone);
+          generator.setTone(currentTone);
+          const fact = await generator.generateFacts(result.className);
           actions.setFunFactData(fact || 'error');
         } catch (error) {
           logError('Gagal membuat fakta menarik', error);
