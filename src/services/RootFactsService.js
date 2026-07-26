@@ -40,7 +40,7 @@ export class RootFactsService {
     this.isGenerating = true;
 
     try {
-      const prompt = `Berikan satu fakta menarik dan singkat tentang sayuran ${vegetableName} dalam satu kalimat dengan nada ${tone}.`;
+      const prompt = `Describe vegetable ${vegetableName} in terms of their health benefits using a ${tone} writing style with one sentences.`;
 
       const output = await this.generator(prompt, {
         max_new_tokens: 60,
